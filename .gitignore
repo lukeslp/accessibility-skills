@@ -1,0 +1,9 @@
+CLAUDE.md
+CRITIC.md
+ONBOARD.md
+SUGGESTIONS.md
+REPO_AUDIT.md
+*_STATUS.md
+.aider.*
+__pycache__/
+*.pyc

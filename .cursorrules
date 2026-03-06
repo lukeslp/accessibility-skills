@@ -1,0 +1,16 @@
+When working on web UI code, follow the accessibility guidelines in SKILL.md.
+
+Key requirements:
+- Every interactive element needs keyboard access
+- Every image needs alt text (or alt="" for decorative)
+- Focus indicators must be visible — never outline:none without a replacement
+- Touch targets minimum 24x24px, prefer 44x44px
+- Color is never the only indicator
+- Animations respect prefers-reduced-motion
+- Dynamic content uses ARIA live regions
+
+Reference files:
+- SKILL.md: Full WCAG 2.2 guidance by disability domain
+- reference/accessibility.css: Production CSS utilities
+- reference/patterns.md: Copy-paste JS/HTML patterns
+- scripts/: 10 audit scripts (Python stdlib, no pip needed)

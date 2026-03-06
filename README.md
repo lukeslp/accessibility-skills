@@ -28,24 +28,44 @@ scripts/                          # 10 Python scripts — stdlib only, no pip in
 
 ### Claude Code
 
-This skill is submitted to the [anthropics/skills](https://github.com/anthropics/skills) community repo. To use it now:
+This skill is submitted to the [anthropics/skills](https://github.com/anthropics/skills) community repo. To use it directly in a project:
 
 ```bash
-# Copy to your project
-cp -r . your-project/.claude/skills/accessibility/
+# Clone into your project's skills directory
+git clone https://github.com/lukeslp/accessibility-skill.git .claude/skills/accessibility
 ```
 
-### Codex CLI
+Or copy the files manually — Claude Code reads `SKILL.md` from `.claude/skills/*/`.
 
-Drop `SKILL.md` into your project or reference it via AGENTS.md:
+### OpenAI Codex CLI
+
+Codex reads `AGENTS.md` at the repo root. Clone this repo into your project or copy the files:
 
 ```bash
-cp SKILL.md your-project/.agents/skills/accessibility/SKILL.md
+# Option 1: Copy AGENTS.md to your project root (lightweight — just the rules)
+cp AGENTS.md your-project/AGENTS.md
+
+# Option 2: Copy everything (full skill + scripts + reference files)
+cp -r . your-project/.agents/accessibility/
 ```
 
-### Cursor / Other agents
+`AGENTS.md` summarizes the key rules and points Codex at `SKILL.md` and the reference files for deeper guidance.
 
-Most coding agents that read markdown instructions can use `SKILL.md` directly. Point your agent's custom instructions at this file.
+### Manus
+
+Manus also reads `AGENTS.md`. Same setup as Codex — drop the files into your project.
+
+### Cursor
+
+A `.cursorrules` file is included. Copy it to your project root:
+
+```bash
+cp .cursorrules your-project/.cursorrules
+```
+
+### Other agents
+
+Most coding agents that read markdown instructions can use `SKILL.md` directly. It's self-contained — point your agent's custom instructions at it.
 
 ## Audit scripts
 
