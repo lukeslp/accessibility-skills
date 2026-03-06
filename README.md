@@ -3,6 +3,8 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![WCAG 2.2 AA](https://img.shields.io/badge/WCAG-2.2_AA-blue.svg)](https://www.w3.org/TR/WCAG22/)
 [![Works with](https://img.shields.io/badge/works_with-Claude_·_Codex_·_Cursor_·_Manus-blue.svg)](#use-with-coding-agents)
+### Handles a lot of the more complex access issues that aren't talked about much.
+
 
 A comprehensive accessibility skill for coding agents — covers motor, cognitive, visual, and communication disabilities with WCAG 2.2 AA compliance guidance, production CSS utilities, copy-paste JavaScript patterns, and 10 standalone audit scripts.
 
