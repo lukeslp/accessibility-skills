@@ -91,7 +91,7 @@ done
 | Project | What it does |
 |---------|-------------|
 | [accessibility-devkit](https://github.com/lukeslp/accessibility-devkit) | TypeScript packages — focus traps, contrast math, color blindness simulation, axe-core auditing |
-| [accessibility-devkit-llm](https://github.com/lukeslp/accessibility-devkit-llm) | LLM-powered alt text generation and WCAG auditing CLI tools + MCP server |
+| [accessibility-devkit-llm](https://github.com/lukeslp/accessibility-devkit-llm) | Alt text generation and WCAG auditing CLI tools + MCP server, works with any LLM provider |
 | [awesome-accessibility](https://github.com/lukeslp/awesome-accessibility) | Curated list of accessibility resources and tools |
 | [accessibility-atlas](https://github.com/lukeslp/accessibility-atlas) | 53 datasets on disability demographics, web accessibility, and assistive technology usage |
 
