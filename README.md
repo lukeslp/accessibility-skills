@@ -1,4 +1,4 @@
-# accessibility-skill
+# accessibility-multiskill
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![WCAG 2.2 AA](https://img.shields.io/badge/WCAG-2.2_AA-blue.svg)](https://www.w3.org/TR/WCAG22/)
@@ -39,7 +39,7 @@ scripts/                          # 10 Python scripts — stdlib only, no pip in
 ### Claude Code
 
 ```bash
-git clone https://github.com/lukeslp/accessibility-skill.git .claude/skills/accessibility
+git clone https://github.com/lukeslp/accessibility-multiskill.git .claude/skills/accessibility
 ```
 
 Claude Code reads `SKILL.md` from `.claude/skills/*/`.
