@@ -1,5 +1,5 @@
 ---
-name: all
+name: accessibility
 description: Build accessible web interfaces that work for people with motor, cognitive, visual, and communication disabilities. Covers WCAG 2.2 AA compliance, motor accessibility patterns from AAC (Augmentative and Alternative Communication) development, keyboard navigation, screen reader compatibility, and inclusive testing methodology.
 ---
 
