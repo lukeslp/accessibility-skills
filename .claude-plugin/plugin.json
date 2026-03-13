@@ -1,0 +1,13 @@
+{
+  "name": "accessibility",
+  "version": "1.0.0",
+  "description": "WCAG 2.2 AA accessibility guidance across motor, cognitive, visual, and screen reader domains with 10 Python audit scripts. From real AAC product development.",
+  "author": {
+    "name": "Luke Steuber",
+    "url": "https://github.com/lukeslp"
+  },
+  "homepage": "https://github.com/lukeslp/accessibility-skills",
+  "repository": "https://github.com/lukeslp/accessibility-skills",
+  "license": "MIT",
+  "keywords": ["accessibility", "wcag", "a11y", "motor", "cognitive", "visual", "screen-reader", "aac"]
+}

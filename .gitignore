@@ -11,6 +11,7 @@ REPO_AUDIT.md
 .cursorrules
 .cursor/
 .claude/
+!.claude-plugin/
 .codex/
 .gemini/
 

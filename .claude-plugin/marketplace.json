@@ -1,0 +1,20 @@
+{
+  "name": "accessibility-skills",
+  "owner": {
+    "name": "Luke Steuber",
+    "url": "https://github.com/lukeslp"
+  },
+  "metadata": {
+    "description": "Accessibility skills for coding agents — motor, cognitive, visual, screen reader, and testing"
+  },
+  "plugins": [
+    {
+      "name": "accessibility",
+      "source": ".",
+      "description": "WCAG 2.2 AA accessibility guidance with 5 domain skills and 10 audit scripts",
+      "version": "1.0.0",
+      "category": "accessibility",
+      "tags": ["wcag", "a11y", "motor", "cognitive", "visual", "screen-reader"]
+    }
+  ]
+}

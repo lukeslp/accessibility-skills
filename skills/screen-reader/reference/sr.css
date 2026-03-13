@@ -1,0 +1,54 @@
+/**
+ * Screen Reader CSS Utilities
+ *
+ * Hide content visually while keeping it accessible to assistive technology.
+ * Extracted from the full accessibility.css for the screen-reader subskill.
+ */
+
+
+/* ==========================================================================
+   SCREEN READER UTILITIES
+   Hide content visually while keeping it accessible to assistive technology.
+   Never use display:none or visibility:hidden for SR-only content.
+   ========================================================================== */
+
+.sr-only,
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Restore visibility when focused — used for skip links */
+.sr-only:focus,
+.sr-only:active,
+.visually-hidden:focus,
+.visually-hidden:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focusable variant — hidden until focused or within focus */
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

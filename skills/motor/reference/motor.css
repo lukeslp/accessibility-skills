@@ -1,0 +1,128 @@
+/**
+ * Motor Accessibility CSS Utilities
+ *
+ * Focus indicators, skip links, touch targets, and mobile accessibility.
+ * Extracted from the full accessibility.css for the motor subskill.
+ *
+ * Sections:
+ *   1. Focus Management
+ *   2. Skip Links
+ *   3. Touch Targets
+ *   4. Disabled & Busy States
+ *   5. Mobile Accessibility
+ */
+
+
+/* ==========================================================================
+   1. FOCUS MANAGEMENT
+   Visible focus indicators for keyboard and switch access users.
+   WCAG 2.4.7: Focus Visible (Level AA) — 3:1 contrast minimum.
+   ========================================================================== */
+
+:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+
+
+/* ==========================================================================
+   2. SKIP LINKS
+   First focusable element on the page. Lets keyboard/switch users bypass
+   repeated navigation blocks. WCAG 2.4.1: Bypass Blocks (Level A).
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  padding: 12px 24px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+
+/* ==========================================================================
+   3. TOUCH TARGETS
+   Minimum 44x44px per WCAG 2.5.5 (Level AAA) and 2.5.8 (Level AA).
+   48px on mobile for finger precision.
+   ========================================================================== */
+
+button,
+a,
+input[type="checkbox"],
+input[type="radio"],
+select,
+[role="button"],
+[role="link"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ==========================================================================
+   4. DISABLED & BUSY STATES
+   Consistent styling that maintains WCAG contrast. Use aria-disabled="true"
+   over the HTML disabled attribute when you need the element to remain in
+   the tab order (e.g., for screen reader discoverability).
+   ========================================================================== */
+
+[disabled],
+[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+[aria-busy="true"] {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+
+/* ==========================================================================
+   5. MOBILE ACCESSIBILITY
+   Larger targets and text for touch interfaces.
+   ========================================================================== */
+
+@media (max-width: 48em) {
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  body {
+    font-size: 110%;
+  }
+
+  p {
+    line-height: 1.6;
+  }
+}

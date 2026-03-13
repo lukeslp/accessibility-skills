@@ -1,0 +1,32 @@
+/**
+ * Visual Accessibility CSS Utilities
+ *
+ * Forced colors support for Windows High Contrast mode.
+ * Extracted from the full accessibility.css for the visual subskill.
+ */
+
+
+/* ==========================================================================
+   FORCED COLORS (WINDOWS HIGH CONTRAST)
+   Ensure borders, outlines, and focus indicators remain visible when the
+   OS overrides all colors.
+   ========================================================================== */
+
+@media (forced-colors: active) {
+  * {
+    border-color: currentColor !important;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    border: 2px solid currentColor !important;
+  }
+
+  :focus-visible {
+    outline: 3px solid currentColor !important;
+    outline-offset: 2px !important;
+  }
+}

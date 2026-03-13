@@ -1,4 +1,4 @@
-# accessibility-multiskill
+# accessibility-skills
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![WCAG 2.2 AA](https://img.shields.io/badge/WCAG-2.2_AA-blue.svg)](https://www.w3.org/TR/WCAG22/)
@@ -15,10 +15,19 @@ This is not a checklist. It covers switch access, eye gaze, keyboard-only naviga
 ## What's in here
 
 ```
-SKILL.md                          # ~350 lines — organized by disability domain + WCAG 2.2 checklist
+.claude-plugin/
+├── plugin.json                   # Plugin manifest for Claude Code
+└── marketplace.json              # Self-hosted marketplace catalog
+skills/                           # 5 domain subskills
+├── motor/                        # /accessibility:motor — switch access, eye gaze, touch targets
+├── visual/                       # /accessibility:visual — contrast, alt text, forced colors
+├── cognitive/                    # /accessibility:cognitive — plain language, reduced motion
+├── screen-reader/                # /accessibility:screen-reader — landmarks, ARIA, forms
+└── testing/                      # /accessibility:testing — full WCAG checklist + all scripts
+SKILL.md                          # Combined skill (~350 lines) — backward compatible
 reference/
-├── accessibility.css             # Production CSS (focus indicators, SR-only, touch targets, reduced motion, forced colors)
-└── patterns.md                   # Copy-paste JS/HTML (focus trap, roving tabindex, native dialog, SR announcements, skip links)
+├── accessibility.css             # Full CSS (focus, SR-only, touch targets, reduced motion, forced colors)
+└── patterns.md                   # Full JS/HTML patterns (focus trap, roving tabindex, dialog, SR announcements)
 scripts/                          # 10 Python scripts — stdlib only, no pip install
 ├── contrast-checker.py           # WCAG contrast ratio calculator
 ├── cvi-contrast-check.py         # High-contrast and color vision presets
@@ -32,19 +41,36 @@ scripts/                          # 10 Python scripts — stdlib only, no pip in
 └── timing-audit.py               # Animation/timing without reduced-motion support
 ```
 
-## Use with coding agents
-
-`SKILL.md` is tht he core file -- it's self-contained and works with any agent that reads markdown instructions. Clone the repo or copy the files into your project however your platform expects them.
-
-### Claude Code
+## Install as a plugin (Claude Code)
 
 ```bash
-git clone https://github.com/lukeslp/accessibility-multiskill.git .claude/skills/accessibility
+# Add the marketplace
+/plugin marketplace add lukeslp/accessibility-skills
+
+# Install the plugin
+/plugin install accessibility@accessibility-skills
+```
+
+Then use individual skills:
+- `/accessibility:motor` — Switch access, eye gaze, touch targets, keyboard nav, fatigue detection
+- `/accessibility:visual` — Contrast, color independence, CVI/photophobia, alt text (4 styles), forced colors
+- `/accessibility:cognitive` — Plain language, dyslexia-friendly text, reduced motion, captions, AAC
+- `/accessibility:screen-reader` — Landmarks, headings, ARIA live regions, forms, data tables
+- `/accessibility:testing` — Full WCAG 2.2 AA checklist, manual testing methodology, all 10 audit scripts
+
+## Use with coding agents (legacy)
+
+`SKILL.md` is the core file -- it's self-contained and works with any agent that reads markdown instructions. Clone the repo or copy the files into your project however your platform expects them.
+
+### Claude Code (clone method)
+
+```bash
+git clone https://github.com/lukeslp/accessibility-skills.git .claude/skills/accessibility
 ```
 
 Claude Code reads `SKILL.md` from `.claude/skills/*/`.
 
-### Codex /  other agents
+### Codex / other agents
 
 Clone into your project root or `.agents/` directory. Most agents read markdown files automatically.
 
@@ -54,10 +80,14 @@ cp -r . your-project/.agents/accessibility/
 
 ### Cursor / Windsurf
 
-Copy `SKILL.md` to your project root as `.cursorrules` or point your custom instructions at it.
+Copy `SKILL.md` to your project root as `.cursorrules`, or use individual subskills:
 
 ```bash
+# All-in-one
 cp SKILL.md your-project/.cursorrules
+
+# Or pick specific domains
+cp skills/motor/SKILL.md your-project/.cursorrules
 ```
 
 ## Audit scripts
