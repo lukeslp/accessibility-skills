@@ -103,10 +103,17 @@ class ColorOnlyChecker(HTMLParser):
                     })
 
         # Check for required field indicators that might be color-only
-        if tag == "input" or tag == "select" or tag == "textarea":
+        if tag in ("input", "select", "textarea"):
             if "required" in attrs_dict or attrs_dict.get("aria-required") == "true":
-                # Not an issue by itself, but worth noting
-                pass
+                # We can't easily check siblings in a streaming parser, but we can 
+                # flag it for manual verification to ensure a text indicator exists.
+                self.issues.append({
+                    "line": line, "severity": "info",
+                    "element": f'<{tag} ... required>',
+                    "issue": "Required field detected — verify a non-color indicator exists",
+                    "fix": "Ensure an asterisk (*) or '(required)' text is present in the "
+                           "label, not just a red border or color change."
+                })
 
     def handle_data(self, data):
         if self._in_style:

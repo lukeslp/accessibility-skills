@@ -31,7 +31,7 @@ SKILL.md                          # Combined skill — backward compat for clone
 reference/
 ├── accessibility.css             # Full CSS (focus, SR-only, touch targets, reduced motion, forced colors)
 └── patterns.md                   # Full JS/HTML patterns (focus trap, roving tabindex, dialog, SR announcements)
-scripts/                          # 10 Python scripts — stdlib only, no pip install
+scripts/                          # 14 Python scripts — stdlib only, no pip install
 ├── contrast-checker.py           # WCAG contrast ratio calculator
 ├── cvi-contrast-check.py         # High-contrast and color vision presets
 ├── alt-text-audit.py             # Image alt text validation
@@ -41,7 +41,11 @@ scripts/                          # 10 Python scripts — stdlib only, no pip in
 ├── focus-order-check.py          # Tabindex and focusability issues
 ├── target-size-check.py          # Touch target size (24px AA / 44px AAA)
 ├── color-only-check.py           # Color as sole information carrier
-└── timing-audit.py               # Animation/timing without reduced-motion support
+├── timing-audit.py               # Animation/timing without reduced-motion support
+├── form-label-audit.py           # Input and label associations
+├── language-audit.py             # Document language (lang attribute)
+├── duplicate-id-check.py         # ID uniqueness for ARIA associations
+└── table-accessibility-audit.py  # Table headers, scope, and captions
 ```
 
 ## Install as a plugin (Claude Code)
