@@ -61,6 +61,8 @@ Eye gaze trackers, head tracking, sip-and-puff devices, and joystick controllers
 - Similar to eye gaze but generally less precise — needs even larger targets
 - Cursor jitter is common — apply smoothing (Kalman-like filtering) to gaze/head predictions
 
+**BCI (Brain-Computer Interface)**: P300 speller, SSVEP, and motor imagery paradigms all map to keyboard events through driver software. BCI is slow (~5-15 chars/minute) — minimize selections and support word prediction. See `/accessibility:motor` for full BCI design guidance.
+
 **Sip-and-puff** (air pressure through a tube):
 - Sip = one action (e.g., advance/next), puff = another (e.g., select)
 - Maps to keyboard events — software interprets pressure as key presses
@@ -155,7 +157,7 @@ Never convey information through color alone. Add icons, patterns, text labels, 
 - Data visualizations: color + pattern fills + direct labels
 
 ### Specialized Vision Needs
-- **CVI (Cortical Visual Impairment)**: Support high-contrast themes — yellow text on black background works well
+- **CVI (Cortical Visual Impairment)**: Brain-based visual impairment — reduce on-screen items to 3-5, use bright saturated colors on black, remove decorative clutter. See `/accessibility:visual` for full CVI design patterns.
 - **Photophobia**: Offer low-brightness themes with muted colors
 - **Color blindness**: Test with deuteranopia (red-green, ~8% of males) and protanopia simulators. Never use red/green as the only differentiator.
 
@@ -231,6 +233,10 @@ Use this as a quick audit checklist when reviewing any interface. Includes WCAG 
 - [ ] Video has synchronized captions
 - [ ] Color is not the sole means of conveying information
 - [ ] Text contrast meets 4.5:1 (normal) / 3:1 (large)
+- [ ] Non-text contrast meets 3:1 for UI components and graphics (1.4.11)
+- [ ] Content reflows at 320px width without horizontal scrolling (1.4.10)
+- [ ] Text spacing can be overridden without content loss (1.4.12)
+- [ ] Hover/focus content is dismissible, hoverable, and persistent (1.4.13)
 - [ ] Text resizable to 200% without loss
 - [ ] No images of text
 
@@ -248,11 +254,13 @@ Use this as a quick audit checklist when reviewing any interface. Includes WCAG 
 - [ ] *2.2* Interactive targets are at least 24x24px with adequate spacing (2.5.8)
 - [ ] *2.2* Dragging operations have single-pointer alternatives (2.5.7)
 - [ ] *2.2* Help mechanisms are consistent across pages (3.2.6)
+- [ ] At least two ways to locate a page: navigation, search, sitemap, TOC, or links (2.4.5)
 
 ### Understandable
 - [ ] `<html lang="en">` (or appropriate language) is set
 - [ ] Navigation is consistent across pages
 - [ ] Form inputs have clear labels and instructions
+- [ ] Inputs for personal data have `autocomplete` attributes (1.3.5)
 - [ ] Error messages are specific and suggest fixes
 - [ ] *2.2* Redundant entry: don't require re-entering information already provided (3.3.7)
 

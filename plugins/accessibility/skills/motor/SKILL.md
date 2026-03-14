@@ -41,6 +41,9 @@ Switch users navigate by scanning — the interface highlights elements one at a
 - **One-switch mode**: Auto-scan advances through elements; single switch = select
 - **Two-switch mode**: One switch = next, other switch = select
 - **Design for scanning groups**: Organize elements in logical clusters (navigation, content, actions) so scanning doesn't require stepping through every element individually
+- **Row-column scanning**: For grids, scan by row first (highlight entire row), then scan individual cells within the selected row. Reduces selections from N to √N.
+- **Group-item scanning**: Organize UI into 3-5 scanning groups. Switch first selects a group, then scans items within it. Standard approach in Tobii Dynavox Communicator, Grid 3, and TD Snap.
+- **Directed scanning**: User controls direction (next/previous) rather than waiting for auto-advance — faster for experienced users but requires two switches.
 - **Predictable layouts**: Grid-based layouts work best — random/overlapping positioning breaks scanning
 - **Linear order matters**: DOM order must match visual order. CSS layout tricks that reorder visually but not in the DOM confuse switch users.
 
@@ -60,6 +63,14 @@ Eye gaze trackers, head tracking, sip-and-puff devices, and joystick controllers
 - Similar to eye gaze but generally less precise — needs even larger targets
 - Cursor jitter is common — apply smoothing (Kalman-like filtering) to gaze/head predictions
 
+**BCI (Brain-Computer Interface)**:
+- P300 speller: a grid of characters flashes rows/columns; the user attends to their target letter, and the EEG detects the P300 evoked potential (~300ms post-stimulus) to identify the selection. Requires large, high-contrast grid cells with consistent positions.
+- SSVEP (Steady-State Visual Evoked Potentials): elements flicker at distinct frequencies (e.g., 7Hz, 10Hz); the user gazes at their target and the BCI detects the corresponding frequency in occipital EEG. Stay under 3Hz for seizure safety (WCAG 2.3.1) if adding flicker to your own UI.
+- Motor imagery: user imagines left/right hand movement to navigate binary choices — maps to keyboard events like sip-and-puff. Design menus as binary trees when supporting this modality.
+- BCI is slow (~5-15 characters/minute for P300). Minimize required selections, support word prediction, and never use BCI as the sole input for time-sensitive actions.
+- All BCI paradigms ultimately map to keyboard or click events through driver software. Full keyboard accessibility remains the foundation.
+- *Basis: Farwell & Donchin 1988 paradigm, commercialized by g.tec (intendiX) and Tobii Dynavox.*
+
 **Sip-and-puff** (air pressure through a tube):
 - Sip = one action (e.g., advance/next), puff = another (e.g., select)
 - Maps to keyboard events — software interprets pressure as key presses
@@ -77,6 +88,13 @@ Eye gaze trackers, head tracking, sip-and-puff devices, and joystick controllers
 - Sortable lists need "move up" / "move down" buttons as keyboard alternatives
 - Never make drag-and-drop the only way to reorder or organize content
 
+## Tremor and Spasticity Handling
+
+- **Debounce**: 150-300ms delay before accepting a second tap (configurable per user)
+- **Guard time**: Ignore accidental activations within N ms of the last intentional action
+- **Sticky keys pattern**: For keyboard shortcuts requiring modifier keys (Ctrl+S), allow sequential pressing rather than simultaneous — matches iOS AssistiveTouch, Windows Sticky Keys, macOS Accessibility Keyboard
+- **Spasticity vs. fatigue distinction**: Spasticity produces sudden, involuntary movements (high-velocity errors) while fatigue produces gradual degradation (increasing response time). Track pointer velocity to distinguish — high-velocity off-target clicks suggest spasticity (increase debounce), steadily rising response times suggest fatigue (enlarge targets, reduce options).
+
 ## Timing and Precision
 
 - **Never require timed responses.** Always allow users to extend or disable time limits (WCAG 2.2.1)
@@ -92,6 +110,10 @@ Motor fatigue degrades accuracy over time. Adaptive interfaces can detect and re
 - **Weighted formula**: Response time (50%), error rate (30%), pause frequency (20%)
 - **Adaptive responses**: As metrics degrade, enlarge touch targets, slow scanning intervals, reduce the number of options shown, increase spacing between elements
 - **Implementation**: Track a rolling window of the last 10-20 interactions. Compare against the user's baseline from their first few minutes of use.
+- **Baseline calibration**: Use first 2-3 minutes of interaction to establish personal baseline metrics
+- **Recovery detection**: If metrics return to baseline after a break, restore original UI density
+- **Graduated response**: Fatigue onset is gradual — use a sliding scale of adaptations (first: increase spacing, then: enlarge targets, then: reduce visible options, finally: suggest a break)
+- *Basis: Koester & Levine (2000) research on motor fatigue in AAC; Fitts's Law — movement time = a + b * log2(distance/width + 1). As fatigue increases, both constants rise, so reduce distance (cluster elements toward center) and increase width (enlarge targets).*
 
 ## Pointer Gestures and Cancellation
 

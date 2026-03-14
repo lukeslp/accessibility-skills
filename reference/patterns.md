@@ -353,6 +353,92 @@ function closeModal(modalEl, triggerEl, trap, escapeHandler) {
 
 ---
 
+## Accessible Tooltip (WCAG 1.4.13)
+
+Tooltips must be dismissible (Escape closes), hoverable (pointer can move over the tooltip), and persistent (stays visible until explicitly dismissed).
+
+```html
+<button aria-describedby="tooltip-1" data-tooltip-trigger>
+  Settings
+</button>
+<div id="tooltip-1" role="tooltip" class="tooltip" hidden>
+  Configure your account preferences
+</div>
+```
+
+```js
+class AccessibleTooltip {
+  constructor(trigger, tooltip) {
+    this.trigger = trigger;
+    this.tooltip = tooltip;
+    this._showTimeout = null;
+    this._hideTimeout = null;
+
+    // Show on hover/focus
+    trigger.addEventListener('mouseenter', () => this._scheduleShow());
+    trigger.addEventListener('focus', () => this._show());
+
+    // Hoverable: keep visible when pointer moves to tooltip
+    tooltip.addEventListener('mouseenter', () => this._cancelHide());
+    tooltip.addEventListener('mouseleave', () => this._scheduleHide());
+
+    // Hide on leave/blur
+    trigger.addEventListener('mouseleave', () => this._scheduleHide());
+    trigger.addEventListener('blur', () => this._scheduleHide());
+
+    // Dismissible: Escape closes without moving pointer
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this._hide();
+    });
+  }
+
+  _scheduleShow() {
+    clearTimeout(this._hideTimeout);
+    this._showTimeout = setTimeout(() => this._show(), 200);
+  }
+
+  _scheduleHide() {
+    clearTimeout(this._showTimeout);
+    this._hideTimeout = setTimeout(() => this._hide(), 300);
+  }
+
+  _cancelHide() {
+    clearTimeout(this._hideTimeout);
+  }
+
+  _show() {
+    clearTimeout(this._hideTimeout);
+    this.tooltip.hidden = false;
+  }
+
+  _hide() {
+    clearTimeout(this._showTimeout);
+    this.tooltip.hidden = true;
+  }
+}
+
+// Usage:
+// document.querySelectorAll('[data-tooltip-trigger]').forEach(trigger => {
+//   const tooltip = document.getElementById(trigger.getAttribute('aria-describedby'));
+//   new AccessibleTooltip(trigger, tooltip);
+// });
+```
+
+```css
+.tooltip {
+  position: absolute;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  max-width: 300px;
+  z-index: 1000;
+}
+```
+
+---
+
 ## Accessible Theme Switcher
 
 Toggle between themes with screen reader announcements, localStorage persistence, and OS preference detection.

@@ -35,6 +35,47 @@ Cognitive and communication accessibility patterns for web interfaces. Covers co
 - **Memory support**: Don't require users to remember information from a previous step. Show context inline. Avoid multi-step processes that depend on recalling earlier choices.
 - **Attention support**: Minimize distractions. No auto-playing media, no flashing content, no unexpected pop-ups. Allow users to pause or suppress non-critical notifications.
 
+## AAC Vocabulary Organization
+
+When building communication interfaces or tools that interact with AAC users:
+
+- **Core vocabulary**: ~200-400 high-frequency words cover ~80% of daily communication (I, want, go, more, stop, help). These should always be visible/accessible without navigation.
+- **Fringe vocabulary**: Topic-specific words (medical terms, school subjects, hobbies). Organized in category pages, accessed from core page.
+- **Motor planning preservation**: Same word = same motor sequence to reach it, always. Changing word positions destroys months of learned motor plans.
+- **Progressive vocabulary**: Start with fewer items per page, add more as user demonstrates proficiency.
+- **Message window**: Always show the composed message and allow editing before sending. AAC users construct messages word by word.
+- **Rate enhancement**: Support word prediction and abbreviation expansion. "gm" expanding to "good morning" reduces selections by 10x.
+- *Basis: core vocabulary research by Banajee, DiCarlo, & Stricklin (2003); LAMP (Language Acquisition through Motor Planning) by PRC-Saltillo.*
+
+## Executive Function Support
+
+Users with TBI, ADHD, autism, or developmental disabilities may struggle with planning, sequencing, and task-switching:
+
+- **Progressive disclosure**: Show only the current step. Don't expose all form fields at once in a multi-step process.
+- **Undo over confirmation**: "Are you sure?" dialogs require evaluating consequences. An undo action after the fact is easier to understand and lower cognitive load.
+- **Consistent affordances**: Interactive elements should always look interactive. Don't use flat, borderless buttons that look like text.
+- **Task persistence**: If a user navigates away mid-task, preserve their progress. Don't clear form data on back-button.
+- **Decision fatigue**: Limit choices per screen to 5-7 options (Miller's Law). Use smart defaults to reduce required decisions.
+
+## Input Purpose and Autocomplete (WCAG 1.3.5)
+
+Use HTML `autocomplete` attributes so browsers and AT can auto-fill known fields:
+- Common values: `name`, `email`, `tel`, `street-address`, `postal-code`, `cc-number`, `bday`
+- Benefits motor-impaired users (fewer keystrokes) and cognitive users (less to remember)
+- Input purpose also enables AT to show familiar icons alongside fields
+
+## Multiple Ways to Navigate (WCAG 2.4.5)
+
+Provide at least two ways to reach any page: navigation menu + search, or navigation + sitemap, or TOC + breadcrumbs. Site search should have a clear, labeled input and visible submit button.
+
+## Consistent Help (WCAG 3.2.6)
+
+If a help mechanism exists (chat, FAQ link, phone number), place it in the same relative position on every page. Contact info, self-help options, and support links must appear in consistent order.
+
+## Text Spacing (WCAG 1.4.12)
+
+Users must be able to override text spacing without losing content: line-height 1.5x font size, paragraph spacing 2x font size, letter-spacing 0.12em, word-spacing 0.16em. Test by applying these values — if content clips or overlaps, the site fails. Don't use fixed heights on text containers.
+
 ## Communication and Speech
 
 - **No voice-only interfaces**: Always provide text or touch alternatives to voice input
@@ -47,6 +88,9 @@ Cognitive and communication accessibility patterns for web interfaces. Covers co
 - [ ] `<html lang="en">` (or appropriate language) is set
 - [ ] Navigation is consistent across pages
 - [ ] Form inputs have clear labels and instructions
+- [ ] Inputs for personal data have `autocomplete` attributes (1.3.5)
+- [ ] At least two ways to reach any page (2.4.5)
+- [ ] Help mechanisms appear in consistent position across pages (3.2.6)
 - [ ] Error messages are specific and suggest fixes
 - [ ] *2.2* Redundant entry: don't require re-entering information already provided (3.3.7)
 

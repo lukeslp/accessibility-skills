@@ -40,6 +40,17 @@ Screen reader compatibility patterns for web interfaces. Covers semantic structu
 - Error messages: associate with `aria-describedby`, announce with `aria-live`
 - Required fields: use `aria-required="true"` and visible indicator (not just an asterisk)
 
+### Input Purpose (WCAG 1.3.5)
+
+Add `autocomplete` attributes to inputs that collect personal data. This lets browsers auto-fill and lets AT present familiar icons:
+- `autocomplete="name"`, `"given-name"`, `"family-name"`
+- `autocomplete="email"`, `"tel"`, `"street-address"`
+- `autocomplete="new-password"`, `"current-password"`, `"bday"`
+
+### Consistent Help (WCAG 3.2.6)
+
+If help mechanisms exist (contact info, chat, FAQ link), they must appear in the same relative order on every page. Screen reader users build mental maps of page structure and depend on positional consistency.
+
 ## Data Tables
 
 - Use `<th>` with `scope="col"` or `scope="row"` for header cells

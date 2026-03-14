@@ -45,11 +45,23 @@ class TargetSizeChecker(HTMLParser):
         self.threshold = threshold
         self.elements = []
         self.issues = []
+        self._in_label = False
+        self._label_has_sizing = False
+        self._label_line = 0
 
     def handle_starttag(self, tag, attrs):
         attrs_dict = dict(attrs)
         role = attrs_dict.get("role", "")
         line = self.getpos()[0]
+
+        if tag == "label":
+            self._in_label = True
+            self._label_line = line
+            # Check if label has sizing that could provide adequate target area
+            style = attrs_dict.get("style", "")
+            self._label_has_sizing = bool(
+                re.search(r'(?:min-)?(?:width|height|padding):', style)
+            ) if style else False
 
         is_interactive = tag in INTERACTIVE_TAGS or role in INTERACTIVE_ROLES
         if not is_interactive:
@@ -82,7 +94,18 @@ class TargetSizeChecker(HTMLParser):
         if tag == "input":
             input_type = attrs_dict.get("type", "text")
             if input_type in ("checkbox", "radio") and width < 0:
-                # Default browser checkbox/radio is ~13x13px — likely undersized
+                # If inside a label, the label extends the click target
+                if self._in_label:
+                    if self._label_has_sizing:
+                        return  # Label likely provides adequate target area
+                    self.issues.append({
+                        "line": line, "severity": "warning",
+                        "element": f'<label> > <input type="{input_type}">',
+                        "issue": f"Default {input_type} is ~13x13px; label extends click area "
+                                 f"but verify label provides at least {self.threshold}px target",
+                        "fix": f"Add padding to the <label> for a {self.threshold}px+ click area"
+                    })
+                    return
                 self.issues.append({
                     "line": line, "severity": "warning",
                     "element": f'<input type="{input_type}">',
@@ -123,6 +146,11 @@ class TargetSizeChecker(HTMLParser):
                 "issue": f"Height {height}px is below {self.threshold}px minimum",
                 "fix": f"Set min-height: {self.threshold}px (48px for mobile)"
             })
+
+
+    def handle_endtag(self, tag):
+        if tag == "label":
+            self._in_label = False
 
 
 def audit_file(filepath, threshold):

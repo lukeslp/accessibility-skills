@@ -99,13 +99,14 @@ class HeadingExtractor(HTMLParser):
                     "fix": "Headings must have text content for screen readers"
                 })
 
-        # First heading should be h1
+        # First heading should be h1, but only warn if no h1 exists elsewhere
         if self.headings and self.headings[0]["level"] != 1:
-            self.issues.append({
-                "severity": "warning",
-                "issue": f"First heading is <h{self.headings[0]['level']}>, not <h1>",
-                "fix": "The first heading on the page should be <h1>"
-            })
+            if len(h1s) == 0:
+                self.issues.append({
+                    "severity": "warning",
+                    "issue": f"First heading is <h{self.headings[0]['level']}>, not <h1>",
+                    "fix": "The first heading on the page should be <h1>"
+                })
 
 
 def audit_file(filepath):

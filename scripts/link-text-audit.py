@@ -128,14 +128,15 @@ class LinkAuditor(HTMLParser):
             })
             return
 
-        # Vague link text
+        # Vague link text (check both visible text and aria-label)
         if accessible_name:
             for pattern in VAGUE_LINK_PATTERNS:
                 if pattern.match(accessible_name):
+                    source = "aria-label" if (aria_label and accessible_name == aria_label) else "link text"
                     self.stats["issues"] += 1
                     self.issues.append({
                         "line": line, "href": href, "severity": "warning",
-                        "issue": f'Vague link text: "{accessible_name}"',
+                        "issue": f'Vague {source}: "{accessible_name}"',
                         "fix": "Use descriptive text that makes sense out of context "
                                "(screen readers list all links on a page)"
                     })

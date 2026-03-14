@@ -23,6 +23,10 @@ Use this as a quick audit checklist when reviewing any interface. Includes WCAG 
 - [ ] Video has synchronized captions
 - [ ] Color is not the sole means of conveying information
 - [ ] Text contrast meets 4.5:1 (normal) / 3:1 (large)
+- [ ] Non-text contrast meets 3:1 for UI components and graphics (1.4.11)
+- [ ] Content reflows at 320px width without horizontal scrolling (1.4.10)
+- [ ] Text spacing can be overridden without content loss (1.4.12)
+- [ ] Hover/focus content is dismissible, hoverable, and persistent (1.4.13)
 - [ ] Text resizable to 200% without loss
 - [ ] No images of text
 
@@ -40,11 +44,13 @@ Use this as a quick audit checklist when reviewing any interface. Includes WCAG 
 - [ ] *2.2* Interactive targets are at least 24x24px with adequate spacing (2.5.8)
 - [ ] *2.2* Dragging operations have single-pointer alternatives (2.5.7)
 - [ ] *2.2* Help mechanisms are consistent across pages (3.2.6)
+- [ ] At least two ways to locate a page: navigation, search, sitemap, TOC, or links (2.4.5)
 
 ### Understandable
 - [ ] `<html lang="en">` (or appropriate language) is set
 - [ ] Navigation is consistent across pages
 - [ ] Form inputs have clear labels and instructions
+- [ ] Inputs for personal data have `autocomplete` attributes (1.3.5)
 - [ ] Error messages are specific and suggest fixes
 - [ ] *2.2* Redundant entry: don't require re-entering information already provided (3.3.7)
 

@@ -197,6 +197,36 @@ select,
 
 
 /* ==========================================================================
+   7b. REFLOW SAFETY
+   Content reflows at 320px width (400% zoom) without horizontal scroll.
+   WCAG 1.4.10: Reflow (Level AA).
+   ========================================================================== */
+
+.reflow-safe {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+
+/* ==========================================================================
+   7c. TEXT SPACING OVERRIDE TEST
+   Apply to body to test WCAG 1.4.12 compliance. If content clips or
+   overlaps with these values, the page fails the criterion.
+   ========================================================================== */
+
+.text-spacing-test {
+  line-height: 1.5 !important;
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.16em !important;
+}
+
+.text-spacing-test p {
+  margin-bottom: 2em !important;
+}
+
+
+/* ==========================================================================
    8. DISABLED & BUSY STATES
    Consistent styling that maintains WCAG contrast. Use aria-disabled="true"
    over the HTML disabled attribute when you need the element to remain in

@@ -40,6 +40,8 @@ class FocusOrderExtractor(HTMLParser):
         super().__init__()
         self.elements = []
         self.issues = []
+        self._first_focusable = None
+        self._found_skip_link = False
 
     def handle_starttag(self, tag, attrs):
         attrs_dict = dict(attrs)
@@ -84,7 +86,7 @@ class FocusOrderExtractor(HTMLParser):
                            "Remove or fix the invalid value."
                 })
 
-        self.elements.append({
+        element_info = {
             "line": line,
             "tag": tag,
             "role": role,
@@ -92,7 +94,17 @@ class FocusOrderExtractor(HTMLParser):
             "disabled": disabled or aria_disabled,
             "aria_hidden": aria_hidden,
             "description": desc,
-        })
+        }
+        self.elements.append(element_info)
+
+        # Track first focusable element for skip link detection
+        if self._first_focusable is None and not (disabled or aria_disabled):
+            if is_native_focusable or (has_tabindex and parsed_tabindex is not None and parsed_tabindex >= 0):
+                self._first_focusable = element_info
+                # Check if it's a skip link (an <a> with href starting with #)
+                href = attrs_dict.get("href", "")
+                if tag == "a" and href.startswith("#") and href != "#":
+                    self._found_skip_link = True
 
     def analyze(self):
         for el in self.elements:
@@ -142,6 +154,16 @@ class FocusOrderExtractor(HTMLParser):
                     "fix": "Hidden elements must not be focusable. Add tabindex='-1' or "
                            "remove aria-hidden."
                 })
+
+        # Check for skip link presence
+        if self.elements and not self._found_skip_link:
+            self.issues.append({
+                "line": 1, "severity": "warning",
+                "element": "<body>",
+                "issue": "No skip link found as first focusable element",
+                "fix": "Add a skip link (<a href=\"#main-content\">Skip to main content</a>) "
+                       "as the first focusable element on the page (WCAG 2.4.1)."
+            })
 
 
 def audit_file(filepath):

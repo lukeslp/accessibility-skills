@@ -6,9 +6,9 @@
 
 ### Helps address complex computer access issues and the multiply disabled
 
-An accessibility skill for coding agents that covers motor, cognitive, visual, and communication disabilities with WCAG 2.2 AA compliance guidance, production CSS utilities, copy-paste JavaScript patterns, and 10 standalone audit scripts. Works with Claude Code, Manus, Cursor, Codex, and anything else thank can take a markdown prompt with python stapled to it.
+An accessibility skill for coding agents that covers motor, cognitive, visual, and communication disabilities with WCAG 2.2 AA compliance guidance, production CSS utilities, copy-paste JavaScript patterns, and 14 standalone audit scripts. Works with Claude Code, Manus, Cursor, Codex, and anything else that can take a markdown prompt with python stapled to it.
 
-This is not a checklist. It covers switch access, eye gaze, keyboard-only navigation, fatigue detection, dyslexia-friendly typography, neurodivergent alt text, forced colors mode, and more. The motor accessibility section comes from years of building assistive technology products — eye gaze access, BCI, physical switch access, and more. 
+This is not a checklist. It covers switch access, eye gaze, BCI, keyboard-only navigation, fatigue detection, dyslexia-friendly typography, neurodivergent alt text, forced colors mode, and more. The motor accessibility section comes from years of building assistive technology products — eye gaze access, BCI, physical switch access, and sip-and-puff.
 
 ### You do NOT want accessibility technical debt. TRUST ME. Plus, it's the right thing to do!
 
@@ -20,13 +20,14 @@ This is not a checklist. It covers switch access, eye gaze, keyboard-only naviga
 └── marketplace.json              # Self-hosted marketplace catalog
 plugins/accessibility/            # The plugin
 ├── plugin.json
-└── skills/                       # 6 skills (1 combined + 5 domain-specific)
+└── skills/                       # 7 skills (1 combined + 6 domain-specific)
     ├── accessibility/             # Combined skill — full accessibility coverage (~350 lines)
     ├── motor/                    # /accessibility:motor — switch access, eye gaze, touch targets
     ├── visual/                   # /accessibility:visual — contrast, alt text, forced colors
     ├── cognitive/                # /accessibility:cognitive — plain language, reduced motion
     ├── screen-reader/            # /accessibility:screen-reader — landmarks, ARIA, forms
-    └── testing/                  # /accessibility:testing — full WCAG checklist + all scripts
+    ├── testing/                  # /accessibility:testing — full WCAG checklist + all scripts
+    └── humanize/                 # /accessibility:humanize — strip robot language from docs
 SKILL.md                          # Combined skill — backward compat for clone-based installs
 reference/
 ├── accessibility.css             # Full CSS (focus, SR-only, touch targets, reduced motion, forced colors)
@@ -64,7 +65,8 @@ Then use skills:
 - `/accessibility:visual` — Contrast, color independence, CVI/photophobia, alt text (4 styles), forced colors
 - `/accessibility:cognitive` — Plain language, dyslexia-friendly text, reduced motion, captions, AAC
 - `/accessibility:screen-reader` — Landmarks, headings, ARIA live regions, forms, data tables
-- `/accessibility:testing` — Full WCAG 2.2 AA checklist, manual testing methodology, all 10 audit scripts
+- `/accessibility:testing` — Full WCAG 2.2 AA checklist, manual testing methodology, all 14 audit scripts
+- `/accessibility:humanize` — Strip robot language from docs and user-facing content
 
 ## Use with coding agents (legacy)
 
@@ -100,7 +102,7 @@ cp plugins/accessibility/skills/motor/SKILL.md your-project/.cursorrules
 
 ## Audit scripts
 
-All 10 scripts use Python stdlib only — no pip install needed. Each accepts HTML files as arguments and supports `--format json` for CI pipelines.
+All 14 scripts use Python stdlib only — no pip install needed. Each accepts HTML files as arguments and supports `--format json` for CI pipelines.
 
 ```bash
 python3 scripts/contrast-checker.py "#333333" "#f5f5f5"
