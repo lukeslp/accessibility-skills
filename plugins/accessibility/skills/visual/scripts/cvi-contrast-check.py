@@ -136,7 +136,7 @@ def extract_colors_from_css(filepath: str) -> list:
         content = f.read()
 
     hex_pattern = re.compile(r'#(?:[0-9a-fA-F]{3}){1,2}')
-    colors = list(set(hex_pattern.findall(content)))
+    colors = sorted(set(hex_pattern.findall(content)))
     return colors
 
 
@@ -194,21 +194,25 @@ def main():
         if len(colors) < 2:
             print("Not enough colors found in file.", file=sys.stderr)
             sys.exit(1)
-        print(f"\n  Colors found in {args.check_theme}: {', '.join(colors[:20])}")
-        print(f"  Checking all pairs...\n")
         failing = []
         for i, c1 in enumerate(colors):
             for c2 in colors[i+1:]:
                 r = check_pair(c1, c2)
                 if not r["wcag_aa"]:
                     failing.append(r)
-        if failing:
-            print(f"  Failing pairs ({len(failing)}):")
-            for f in failing[:20]:
-                print(f"    {f['ratio']:5.1f}:1  {f['fg']} / {f['bg']}")
+        if args.format == "json":
+            print(json.dumps({"file": args.check_theme, "colors": colors,
+                              "failing_pairs": failing}, indent=2))
         else:
-            print("  All color pairs pass WCAG AA.")
-        print()
+            print(f"\n  Colors found in {args.check_theme}: {', '.join(colors[:20])}")
+            print(f"  Checking all pairs...\n")
+            if failing:
+                print(f"  Failing pairs ({len(failing)}):")
+                for f in failing[:20]:
+                    print(f"    {f['ratio']:5.1f}:1  {f['fg']} / {f['bg']}")
+            else:
+                print("  All color pairs pass WCAG AA.")
+            print()
 
     else:
         parser.print_help()

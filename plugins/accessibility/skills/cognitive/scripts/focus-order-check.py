@@ -70,11 +70,25 @@ class FocusOrderExtractor(HTMLParser):
             desc_parts.append(f'({text_hint[:30]})')
         desc = " ".join(desc_parts) + ">"
 
+        # Parse tabindex defensively — invalid values get flagged as issues
+        parsed_tabindex = None
+        if tabindex is not None:
+            try:
+                parsed_tabindex = int(tabindex)
+            except ValueError:
+                self.issues.append({
+                    "line": line, "severity": "error",
+                    "element": desc,
+                    "issue": f"Invalid tabindex value: \"{tabindex}\"",
+                    "fix": "tabindex must be an integer (-1, 0, or positive). "
+                           "Remove or fix the invalid value."
+                })
+
         self.elements.append({
             "line": line,
             "tag": tag,
             "role": role,
-            "tabindex": int(tabindex) if tabindex is not None else None,
+            "tabindex": parsed_tabindex,
             "disabled": disabled or aria_disabled,
             "aria_hidden": aria_hidden,
             "description": desc,

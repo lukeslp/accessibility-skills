@@ -103,10 +103,17 @@ class ColorOnlyChecker(HTMLParser):
                     })
 
         # Check for required field indicators that might be color-only
-        if tag == "input" or tag == "select" or tag == "textarea":
+        if tag in ("input", "select", "textarea"):
             if "required" in attrs_dict or attrs_dict.get("aria-required") == "true":
-                # Not an issue by itself, but worth noting
-                pass
+                # We can't easily check siblings in a streaming parser, but we can 
+                # flag it for manual verification to ensure a text indicator exists.
+                self.issues.append({
+                    "line": line, "severity": "info",
+                    "element": f'<{tag} ... required>',
+                    "issue": "Required field detected — verify a non-color indicator exists",
+                    "fix": "Ensure an asterisk (*) or '(required)' text is present in the "
+                           "label, not just a red border or color change."
+                })
 
     def handle_data(self, data):
         if self._in_style:
@@ -115,15 +122,54 @@ class ColorOnlyChecker(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "style" and self._in_style:
             self._in_style = False
-            # Check for link styling that removes underlines globally
-            if re.search(r'a\s*\{[^}]*text-decoration:\s*none', self._style_content):
-                self.issues.append({
-                    "line": 0, "severity": "warning",
-                    "element": "<style> (global rule)",
-                    "issue": "Global link underline removal detected in stylesheet",
-                    "fix": "Links distinguished only by color fail WCAG 1.4.1. "
-                           "Add underline on hover/focus at minimum, or use another indicator."
-                })
+            # Check for link styling that removes underlines — handles
+            # nested blocks (@media), compound selectors, and variants like
+            # "a {", "a.nav {", "a[href] {", ".foo a {", "button, a {"
+            self._check_link_underlines(self._style_content)
+
+    def _check_link_underlines(self, css):
+        """Walk CSS blocks (including nested @-rules) looking for anchor
+        selectors paired with text-decoration: none."""
+        depth = 0
+        i = 0
+        selector_start = 0
+        while i < len(css):
+            ch = css[i]
+            if ch == '{':
+                if depth == 0:
+                    selector = css[selector_start:i]
+                    # At-rules like @media: recurse into their body
+                    if selector.strip().startswith('@'):
+                        # Find matching close brace for this at-rule
+                        inner_depth = 1
+                        j = i + 1
+                        while j < len(css) and inner_depth > 0:
+                            if css[j] == '{':
+                                inner_depth += 1
+                            elif css[j] == '}':
+                                inner_depth -= 1
+                            j += 1
+                        self._check_link_underlines(css[i+1:j-1])
+                        i = j
+                        selector_start = i
+                        continue
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+                if depth == 0:
+                    body = css[css.index('{', selector_start)+1:i]
+                    selector = css[selector_start:css.index('{', selector_start)]
+                    if re.search(r'(?:^|[\s,>+~])a(?:$|[\s,>+~:.\[{])', selector) and \
+                       re.search(r'text-decoration:\s*none', body, re.I):
+                        self.issues.append({
+                            "line": 0, "severity": "warning",
+                            "element": f"<style> ({selector.strip()})",
+                            "issue": "Link underline removal detected in stylesheet",
+                            "fix": "Links distinguished only by color fail WCAG 1.4.1. "
+                                   "Add underline on hover/focus at minimum, or use another indicator."
+                        })
+                    selector_start = i + 1
+            i += 1
 
 
 def audit_file(filepath):

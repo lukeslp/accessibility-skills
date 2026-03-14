@@ -2,9 +2,9 @@
 """
 Alt Text Audit
 
-Scan HTML files for missing, empty, or low-quality alt text on images.
-Flags: missing alt attributes, empty alt on non-decorative images,
-suspicious alt text ("image", "photo", "untitled", filename patterns).
+Scan HTML files for missing or low-quality alt text on images.
+Flags: missing alt attributes, suspicious alt text ("image", "photo",
+"untitled", filename patterns). Treats alt="" as valid decorative markup.
 
 No dependencies — stdlib only.
 
@@ -41,7 +41,7 @@ class ImageAuditor(HTMLParser):
     def __init__(self):
         super().__init__()
         self.issues = []
-        self.stats = {"total_images": 0, "missing_alt": 0, "empty_alt": 0,
+        self.stats = {"total_images": 0, "missing_alt": 0,
                       "suspicious_alt": 0, "decorative": 0, "good": 0}
         self._line = 1
 
@@ -66,18 +66,10 @@ class ImageAuditor(HTMLParser):
         alt = attrs_dict["alt"]
 
         if alt == "":
-            role = attrs_dict.get("role", "")
-            aria_hidden = attrs_dict.get("aria-hidden", "")
-            if role == "presentation" or aria_hidden == "true":
-                self.stats["decorative"] += 1
-                return
-            # Empty alt without explicit decorative markers — might be intentional
-            self.stats["empty_alt"] += 1
-            self.issues.append({
-                "line": line, "src": src, "severity": "warning",
-                "issue": "Empty alt text without role='presentation'",
-                "fix": "If decorative, add role='presentation'. If meaningful, add description."
-            })
+            # alt="" is valid per WCAG for decorative images — no additional
+            # attributes required. role="presentation" or aria-hidden="true"
+            # are optional reinforcement.
+            self.stats["decorative"] += 1
             return
 
         for pattern in SUSPICIOUS_PATTERNS:
@@ -139,7 +131,7 @@ def main():
             print(f"  {filepath}")
             print(f"  Images: {stats['total_images']}  Good: {stats['good']}  "
                   f"Decorative: {stats['decorative']}")
-            print(f"  Missing: {stats['missing_alt']}  Empty: {stats['empty_alt']}  "
+            print(f"  Missing: {stats['missing_alt']}  "
                   f"Suspicious: {stats['suspicious_alt']}")
             print(f"{'='*60}")
             for issue in issues:

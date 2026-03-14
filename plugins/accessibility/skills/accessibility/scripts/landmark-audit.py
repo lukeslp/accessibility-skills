@@ -3,8 +3,8 @@
 Landmark Audit
 
 Check HTML for proper ARIA landmark structure: header/banner, nav, main,
-aside/complementary, footer/contentinfo. Flags missing landmarks, duplicates
-without labels, and content outside landmarks.
+aside/complementary, footer/contentinfo. Flags missing landmarks and duplicates
+without labels.
 
 No dependencies — stdlib only.
 
@@ -49,6 +49,9 @@ class LandmarkExtractor(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag in self._skip_tags:
             self._in_skip += 1
+            return
+
+        if self._in_skip > 0:
             return
 
         attrs_dict = dict(attrs)

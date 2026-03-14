@@ -75,6 +75,7 @@ class LinkAuditor(HTMLParser):
         text = self._link_text.strip()
         href = self._link_attrs.get("href", "")
         aria_label = self._link_attrs.get("aria-label", "")
+        aria_labelledby = self._link_attrs.get("aria-labelledby", "")
         title = self._link_attrs.get("title", "")
         line = self._link_line
 
@@ -82,7 +83,30 @@ class LinkAuditor(HTMLParser):
         if href.startswith("#") or href.startswith("javascript:"):
             return
 
-        accessible_name = text or aria_label
+        # Compute accessible name: aria-labelledby > aria-label > text content
+        accessible_name = aria_labelledby or aria_label or text
+
+        # Image-only link without alt (check before empty-link)
+        if not text and not aria_label and not aria_labelledby and self._link_has_img:
+            if not self._link_img_alt:
+                self.stats["issues"] += 1
+                self.issues.append({
+                    "line": line, "href": href, "severity": "error",
+                    "issue": "Image-only link with no alt text",
+                    "fix": "Add alt text to the image describing the link destination"
+                })
+                return
+            accessible_name = self._link_img_alt
+
+        # Title used as only source of info (check before generic empty-link)
+        if not accessible_name and not self._link_has_img and title:
+            self.stats["issues"] += 1
+            self.issues.append({
+                "line": line, "href": href, "severity": "warning",
+                "issue": f'Link relies on title attribute only: "{title}"',
+                "fix": "Title is not reliably announced — add visible text or aria-label"
+            })
+            return
 
         # Empty link
         if not accessible_name and not self._link_has_img:
@@ -93,18 +117,6 @@ class LinkAuditor(HTMLParser):
                 "fix": "Add descriptive text or aria-label"
             })
             return
-
-        # Image-only link without alt
-        if not text and self._link_has_img:
-            if not self._link_img_alt:
-                self.stats["issues"] += 1
-                self.issues.append({
-                    "line": line, "href": href, "severity": "error",
-                    "issue": "Image-only link with no alt text",
-                    "fix": "Add alt text to the image describing the link destination"
-                })
-                return
-            accessible_name = self._link_img_alt
 
         # Vague link text
         if accessible_name:
@@ -118,16 +130,6 @@ class LinkAuditor(HTMLParser):
                                "(screen readers list all links on a page)"
                     })
                     return
-
-        # Title used as only source of info
-        if not text and not aria_label and title:
-            self.stats["issues"] += 1
-            self.issues.append({
-                "line": line, "href": href, "severity": "warning",
-                "issue": f'Link relies on title attribute only: "{title}"',
-                "fix": "Title is not reliably announced — add visible text or aria-label"
-            })
-            return
 
         self.stats["good"] += 1
 

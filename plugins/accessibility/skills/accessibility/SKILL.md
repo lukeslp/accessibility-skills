@@ -280,7 +280,7 @@ npx pa11y <url>
 
 ### Included Scripts
 
-This skill includes 10 standalone Python scripts (stdlib only — no pip install needed) for targeted audits. All accept HTML files as arguments and support `--format json` for CI integration.
+This skill includes 14 standalone Python scripts (stdlib only — no pip install needed) for targeted audits. All accept HTML files as arguments and support `--format json` for CI integration.
 
 | Script | Domain | What it checks |
 |--------|--------|---------------|
@@ -294,6 +294,10 @@ This skill includes 10 standalone Python scripts (stdlib only — no pip install
 | `target-size-check.py` | Motor | Undersized touch targets (WCAG 2.5.8: 24px AA, 44px AAA) |
 | `color-only-check.py` | Color blindness | Patterns where color is the sole information carrier |
 | `timing-audit.py` | Motor / Cognitive | setTimeout, autoplay, animations without reduced-motion support |
+| `form-label-audit.py` | SR / Cognitive | Missing form labels or accessible names (aria-label) |
+| `language-audit.py` | SR | Presence and validity of lang attribute on <html> element |
+| `duplicate-id-check.py` | SR / Robustness | Duplicate IDs that break ARIA associations |
+| `table-accessibility-audit.py` | SR | Table headers (<th>), scope attributes, and captions |
 
 ```bash
 # Run individual checks

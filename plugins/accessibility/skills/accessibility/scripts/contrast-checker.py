@@ -17,16 +17,20 @@ import sys
 
 def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     """Convert hex color string to RGB tuple."""
+    original = hex_color
     hex_color = hex_color.lstrip("#")
     if len(hex_color) == 3:
         hex_color = "".join(c * 2 for c in hex_color)
     if len(hex_color) != 6:
-        raise ValueError(f"Invalid hex color: #{hex_color}")
-    return (
-        int(hex_color[0:2], 16),
-        int(hex_color[2:4], 16),
-        int(hex_color[4:6], 16),
-    )
+        raise ValueError(f"Invalid hex color: {original}")
+    try:
+        return (
+            int(hex_color[0:2], 16),
+            int(hex_color[2:4], 16),
+            int(hex_color[4:6], 16),
+        )
+    except ValueError:
+        raise ValueError(f"Invalid hex color: {original}")
 
 
 def relative_luminance(r: int, g: int, b: int) -> float:
