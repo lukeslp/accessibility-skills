@@ -4,11 +4,11 @@
 [![WCAG 2.2 AA](https://img.shields.io/badge/WCAG-2.2_AA-blue.svg)](https://www.w3.org/TR/WCAG22/)
 [![Works with](https://img.shields.io/badge/works_with-Claude_·_Codex_·_Cursor-blue.svg)](#use-with-coding-agents)
 
-### Helps address complex computer access issues and the multiply disabled
+### Real-world motor accessibility for complex access needs
 
-An accessibility skill for coding agents that covers motor, cognitive, visual, and communication disabilities with WCAG 2.2 AA compliance guidance, production CSS utilities, copy-paste JavaScript patterns, and 14 standalone audit scripts. Works with Claude Code, Manus, Cursor, Codex, and anything else that can take a markdown prompt with python stapled to it.
+Accessibility skill for coding agents — motor, cognitive, visual, and communication disabilities. WCAG 2.2 AA guidance, production CSS, copy-paste JS patterns, 14 audit scripts. Drop it into Claude Code, Manus, Cursor, Codex, or anything that reads markdown.
 
-This is not a checklist. It covers switch access, eye gaze, BCI, keyboard-only navigation, fatigue detection, dyslexia-friendly typography, neurodivergent alt text, forced colors mode, and more. The motor accessibility section comes from years of building assistive technology products — eye gaze access, BCI, physical switch access, and sip-and-puff.
+Not a checklist. Covers switch access, eye gaze, BCI (P300, SSVEP, motor imagery), sip-and-puff, fatigue detection, tremor handling, CVI, dyslexia-friendly typography, neurodivergent alt text, forced colors mode. The motor section comes from years of building AT products — the kind of stuff most accessibility guides skip entirely.
 
 ### You do NOT want accessibility technical debt. TRUST ME. Plus, it's the right thing to do!
 
@@ -68,48 +68,32 @@ Then use skills:
 - `/accessibility:testing` — Full WCAG 2.2 AA checklist, manual testing methodology, all 14 audit scripts
 - `/accessibility:humanize` — Strip robot language from docs and user-facing content
 
-## Use with coding agents (legacy)
+## Other agents (clone method)
 
-`SKILL.md` is the core file -- it's self-contained and works with any agent that reads markdown instructions. Clone the repo or copy the files into your project however your platform expects them.
-
-### Claude Code (clone method)
+`SKILL.md` is self-contained. Clone it or copy it however your agent expects markdown.
 
 ```bash
+# Claude Code
 git clone https://github.com/lukeslp/accessibility-skills.git .claude/skills/accessibility
-```
 
-Claude Code reads `SKILL.md` from `.claude/skills/*/`.
-
-### Codex / other agents
-
-Clone into your project root or `.agents/` directory. Most agents read markdown files automatically.
-
-```bash
+# Codex / others
 cp -r . your-project/.agents/accessibility/
-```
 
-### Cursor / Windsurf
-
-Copy `SKILL.md` to your project root as `.cursorrules`, or use individual subskills:
-
-```bash
-# All-in-one
+# Cursor / Windsurf — all-in-one or pick a domain
 cp SKILL.md your-project/.cursorrules
-
-# Or pick specific domains
 cp plugins/accessibility/skills/motor/SKILL.md your-project/.cursorrules
 ```
 
 ## Audit scripts
 
-All 14 scripts use Python stdlib only — no pip install needed. Each accepts HTML files as arguments and supports `--format json` for CI pipelines.
+14 Python scripts, stdlib only. Each takes HTML files and supports `--format json` for CI.
 
 ```bash
 python3 scripts/contrast-checker.py "#333333" "#f5f5f5"
 python3 scripts/alt-text-audit.py index.html
 python3 scripts/target-size-check.py --threshold 44 index.html
 
-# Run all HTML audits at once
+# Run everything at once
 for script in scripts/*-audit.py scripts/*-check.py; do
   python3 "$script" index.html
 done
@@ -119,10 +103,10 @@ done
 
 | Project | What it does |
 |---------|-------------|
-| [accessibility-devkit](https://github.com/lukeslp/accessibility-devkit) | TypeScript packages — focus traps, contrast math, color blindness simulation, axe-core auditing |
-| [accessibility-devkit-llm](https://github.com/lukeslp/accessibility-devkit-llm) | Alt text generation and WCAG auditing CLI tools + MCP server, works with any LLM provider |
-| [awesome-accessibility](https://github.com/lukeslp/awesome-accessibility) | Curated list of accessibility resources and tools |
-| [accessibility-atlas](https://github.com/lukeslp/accessibility-atlas) | 53 datasets on disability demographics, web accessibility, and assistive technology usage |
+| [accessibility-devkit](https://github.com/lukeslp/accessibility-devkit) | TypeScript — focus traps, contrast math, color blindness simulation, axe-core |
+| [accessibility-devkit-llm](https://github.com/lukeslp/accessibility-devkit-llm) | Alt text generation and WCAG auditing via LLM, CLI + MCP server |
+| [awesome-accessibility](https://github.com/lukeslp/awesome-accessibility) | Curated accessibility resources |
+| [accessibility-atlas](https://github.com/lukeslp/accessibility-atlas) | 53 datasets — disability demographics, web accessibility, AT usage |
 
 ## License
 
